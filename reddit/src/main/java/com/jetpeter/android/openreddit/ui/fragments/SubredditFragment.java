@@ -132,7 +132,8 @@ public class SubredditFragment extends RedditFragment implements ListView.OnItem
         @Override
         public void onResponse(ListingWrapper getListingResponse) {
             isFetchingMorePosts = false;
-//            mAdapter.appendPosts(getListingResponse.getPosts());
+            Listing listing = getListingResponse.getListing();
+            mAdapter.appendPosts(listing.getChildren());
         }
     }
 
