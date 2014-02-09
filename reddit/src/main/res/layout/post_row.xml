@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:baselineAligned="false"
+    android:weightSum="10">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8">
+
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/PostRow_thumbnail"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:scaleType="centerCrop"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:id="@+id/PostRow_title"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/PostRow_thumbnail" />
+
+        <TextView
+            android:id="@+id/PostRow_subreddit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:layout_below="@+id/PostRow_title"
+            android:layout_alignLeft="@+id/PostRow_title"
+            android:layout_alignStart="@+id/PostRow_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/PostRow_source"
+            android:textSize="10sp"
+            android:layout_alignTop="@+id/PostRow_subreddit"
+            android:layout_toRightOf="@+id/PostRow_subreddit"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/PostRow_author"
+            android:textSize="10sp"
+            android:layout_alignTop="@+id/PostRow_source"
+            android:layout_toRightOf="@+id/PostRow_source"
+            android:layout_marginLeft="10dp" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="fill_parent"
+        android:layout_weight="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/PostRow_votes_time"
+            android:layout_gravity="center_horizontal"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/PostRow_comments"
+            android:layout_gravity="center_horizontal"
+            android:textSize="12sp"
+            android:gravity="center" />
+    </LinearLayout>
+</LinearLayout>
