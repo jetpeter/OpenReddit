@@ -27,6 +27,7 @@ proguard/
 *.ipr
 *.iws
 .idea/
+.gradle/
 
 # OSX file system garbage
 .DS_Store
