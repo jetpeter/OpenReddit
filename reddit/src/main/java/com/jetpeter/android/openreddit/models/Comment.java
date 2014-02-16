@@ -29,6 +29,27 @@ public class Comment extends RedditData {
     private int num_reports;
     private int ups;
 
+    // Non reddit variables.  These keep track of the state of the view
+    // for the adapter
+    private int indent;
+    private boolean hidden;
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public int getIndent() {
+        return indent;
+    }
+
+    public void setIndent(int indent) {
+        this.indent = indent;
+    }
+
     public String getSubredditId() {
         return subreddit_id;
     }

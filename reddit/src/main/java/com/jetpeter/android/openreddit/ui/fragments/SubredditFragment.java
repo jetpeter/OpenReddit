@@ -15,6 +15,7 @@ import com.jetpeter.android.openreddit.R;
 import com.jetpeter.android.openreddit.models.Listing;
 import com.jetpeter.android.openreddit.models.ListingWrapper;
 import com.jetpeter.android.openreddit.network.ApiEndpoints;
+import com.jetpeter.android.openreddit.ui.ListSwipeInteraction;
 import com.jetpeter.android.openreddit.ui.RedditActivity;
 import com.jetpeter.android.openreddit.ui.adapters.SubredditAdapter;
 
@@ -68,6 +69,8 @@ public class SubredditFragment extends RedditFragment implements ListView.OnItem
         postList.setOnScrollListener(new PostsScrollListener());
         postList.setAdapter(mAdapter);
         postList.setOnItemClickListener(this);
+        postList.setOnTouchListener(new ListSwipeInteraction(postList, null));
+
         // Now setup the PullToRefreshLayout
         ActionBarPullToRefresh.from(getActivity())
                 // Mark All Children as pullable
