@@ -4,7 +4,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_small">
+    android:paddingTop="@dimen/padding_small"
+    android:paddingLeft="@dimen/padding_small"
+    android:paddingRight="@dimen/padding_small">
 
     <TextView
         android:id="@+id/CommentRow_author"
@@ -37,17 +39,30 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/CommentRow_author"
         android:layout_alignParentLeft="true"
+        android:autoLink="web"
         android:layout_alignParentStart="true"
-        android:padding="@dimen/padding_small"/>
+        android:linksClickable="true"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingLeft="@dimen/padding_small"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="5 more"
-        android:id="@+id/CommentRow_more"
+        android:text="5h"
+        android:id="@+id/CommentRow_time_posted"
         android:layout_alignParentTop="true"
         android:textSize="12sp"
         android:layout_toRightOf="@+id/CommentRow_points"
-        android:layout_marginLeft="@dimen/padding"
         android:layout_margin="@dimen/padding_small" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(5 children)"
+        android:id="@+id/CommentRow_more"
+        android:layout_alignParentTop="true"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/CommentRow_time_posted"
+        android:layout_margin="@dimen/padding_small" />
+
 </RelativeLayout>

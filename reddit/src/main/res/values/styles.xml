@@ -4,5 +4,21 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    
+    <style name="TextRegular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextSmall">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextTiny">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextLarge">
+        <item name="android:textSize">16sp</item>
+    </style>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.jetpeter.android.openreddit.ui.adapters;
 
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import com.jetpeter.android.openreddit.R;
 import com.jetpeter.android.openreddit.models.Comment;
 import com.jetpeter.android.openreddit.models.ListingWrapper;
 import com.jetpeter.android.openreddit.models.RedditDataWrapper;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +30,6 @@ public class CommentsAdapter extends BaseAdapter {
     // when we hide and show threads.
     private final List<RedditDataWrapper> mComments = new LinkedList<RedditDataWrapper>();
     private final LayoutInflater mInflater;
-
     public CommentsAdapter(LayoutInflater inflater) {
         mInflater = inflater;
     }
@@ -158,7 +159,6 @@ public class CommentsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.comment_row, parent, false);
-            convertView.setOnClickListener(new CommentClickListener());
             CommentViewHolder holder = new CommentViewHolder(convertView);
             convertView.setTag(holder);
         }
@@ -177,6 +177,7 @@ public class CommentsAdapter extends BaseAdapter {
         private final TextView mAuthor;
         private final TextView mPoints;
         private final TextView mText;
+        private final TextView mTimeSincePost;
         private final TextView mMoreCount;
 
         private int mIndex;
@@ -186,14 +187,20 @@ public class CommentsAdapter extends BaseAdapter {
             mPoints = (TextView) commentRow.findViewById(R.id.CommentRow_points);
             mText = (TextView) commentRow.findViewById(R.id.CommentRow_text);
             mMoreCount = (TextView) commentRow.findViewById(R.id.CommentRow_more);
+            mTimeSincePost = (TextView) commentRow.findViewById(R.id.CommentRow_time_posted);
+            mAuthor.setOnClickListener(new CommentClickListener(this));
         }
 
         public void setComment(Comment comment, int index) {
             mAuthor.setText(comment.getAuthor());
             mPoints.setText(comment.getUps() - comment.getDowns() + "pts");
-            mText.setText(comment.getBody());
+
+            mText.setText(comment.getSpannedHtmlBody());
+
+            mTimeSincePost.setText(comment.getShortTimeSinceCreated());
             mText.setVisibility(comment.isHidden() ? View.GONE : View.VISIBLE);
             mMoreCount.setVisibility(comment.isHidden() ? View.VISIBLE : View.GONE);
+            mMoreCount.setText("(" + comment.getCurrentChildCount() + " children)");
             mIndex = index;
         }
 
@@ -204,7 +211,7 @@ public class CommentsAdapter extends BaseAdapter {
         public void collapseText(int moreCount) {
             // TODO animate this
             mText.setVisibility(View.GONE);
-            mMoreCount.setText(moreCount + " more");
+            mMoreCount.setText("(" + moreCount + " children)");
             mMoreCount.setVisibility(View.VISIBLE);
         }
 
@@ -217,31 +224,35 @@ public class CommentsAdapter extends BaseAdapter {
 
     /**
      * Click listener that hide or shows the list of comments.
-     * The index of the comment is retrieved from the tag of the view
-     * So this click listener does not have to be re-instantiated every time
-     * the view is recycled.  If the tag is not an instance of CommentViewHolder of this view
-     * an exception will be thrown and caught and nothing will happen.
+     * The index of the comment is retrieved from the instance of CommentViewHolder
+     * that is provided in the constructor.
+     * This click listener does not have to be re-instantiated every time
+     * the view is recycled because the position of the Comment is updated in the view holder
+     * every time is updated.
      */
     private class CommentClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            try {
-                CommentViewHolder holder = (CommentViewHolder) view.getTag();
-                toggleComments(holder);
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-            }
+
+        private final CommentViewHolder mViewHolder;
+
+        public CommentClickListener(CommentViewHolder holder) {
+            mViewHolder = holder;
         }
 
-        private void toggleComments(CommentViewHolder holder) {
-            int position = holder.getIndex();
+        @Override
+        public void onClick(View view) {
+                toggleComments();
+        }
+
+        private void toggleComments() {
+            int position = mViewHolder.getIndex();
             Comment comment = getItem(position);
             if (comment.isHidden()) {
                 addChildren(comment, ++position);
-                showCommentsHidden(true, holder, 0);
+                showCommentsHidden(true, mViewHolder, 0);
             } else {
                 int numRemoved = removeChildren(comment);
-                showCommentsHidden(false, holder, numRemoved);
+                comment.setCurrentChildCount(numRemoved);
+                showCommentsHidden(false, mViewHolder, numRemoved);
             }
 
             notifyDataSetChanged();

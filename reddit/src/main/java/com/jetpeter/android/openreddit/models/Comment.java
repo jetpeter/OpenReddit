@@ -1,5 +1,11 @@
 package com.jetpeter.android.openreddit.models;
 
+import android.text.Html;
+import android.text.Spanned;
+
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Jefferey on 1/26/14.
  *
@@ -33,6 +39,7 @@ public class Comment extends RedditData {
     // for the adapter
     private int indent;
     private boolean hidden;
+    private int currentChildCount;
 
     public boolean isHidden() {
         return hidden;
@@ -132,5 +139,50 @@ public class Comment extends RedditData {
 
     public int getUps() {
         return ups;
+    }
+
+    public void setCurrentChildCount(int currentChildCount) {
+        this.currentChildCount = currentChildCount;
+    }
+
+    public int getCurrentChildCount() {
+        return currentChildCount;
+    }
+
+    public String getShortTimeSinceCreated() {
+        Calendar now = Calendar.getInstance();
+        long diffInMilliseconds = now.getTimeInMillis() - (getCreatedUtc() * 1000);
+        long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMilliseconds);
+        long seconds = diffInSec % 60;
+        diffInSec/= 60;
+        long minutes = diffInSec % 60;
+        diffInSec /= 60;
+        long hours = diffInSec % 24;
+        diffInSec /= 24;
+        long days = diffInSec;
+        if (days > 0) {
+            return days + "d";
+        }
+        if (hours > 0) {
+            return hours + "h";
+        }
+        if (minutes > 0) {
+            return minutes + "m";
+        }
+        return seconds + "s";
+    }
+
+    public Spanned getSpannedHtmlBody() {
+        String htmlBody = Html.fromHtml(getBodyHtml()).toString();
+        // Fix Html tags not supported by TextView
+        // Supported tags are listed here: http://commonsware.com/blog/Android/2010/05/26/html-tags-supported-by-textview.html
+        htmlBody = htmlBody.replaceAll("<code>", "<tt>").replaceAll("</code>", "</tt>");
+        // Remove trailing newlines
+        if (htmlBody.length() > 2) {
+            htmlBody = htmlBody.substring(0, htmlBody.length() - 2);
+        } else {
+            htmlBody = "";
+        }
+        return Html.fromHtml(htmlBody);
     }
 }
